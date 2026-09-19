@@ -11,8 +11,8 @@ String? validateUrl(String value) {
   if (uri == null || uri.scheme != 'https' || uri.userInfo.isNotEmpty) {
     return 'Нужна корректная ссылка, начинающаяся с https://';
   }
-  if (!['disk.yandex.ru', 'disk.yandex.com', 'cloud.mail.ru'].contains(uri.host)) {
-    return 'Используйте ссылку disk.yandex.ru или cloud.mail.ru.';
+  if (!['disk.yandex.ru', 'disk.yandex.com', 'cloud.mail.ru', 'doc.mail.ru'].contains(uri.host)) {
+    return 'Используйте ссылку disk.yandex.ru, cloud.mail.ru или doc.mail.ru.';
   }
   return null;
 }

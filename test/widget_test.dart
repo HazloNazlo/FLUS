@@ -13,6 +13,8 @@ void main() {
     expect(validateUrl('https://user@disk.yandex.ru/edit/d/test'), isNotNull);
     expect(validateUrl('https://disk.yandex.ru/edit/d/example'), isNull);
     expect(validateUrl('https://disk.yandex.com/i/example'), isNull);
+    expect(validateUrl('https://cloud.mail.ru/public/wQjd/w5uUGfuZf'), isNull);
+    expect(validateUrl('https://doc.mail.ru/r-seven/edit/home/Doc.docx'), isNull);
   });
 
   testWidgets(
