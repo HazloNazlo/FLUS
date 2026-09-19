@@ -7,12 +7,12 @@ import java.util.Locale
 
 object LauncherRules {
     fun validate(value: String): String? {
-        if (value.isBlank()) return "URL пустой. Вставьте Yandex Docs URL."
+        if (value.isBlank()) return "URL пустой. Вставьте Yandex / Mail.ru URL."
         if (value.length > 16384 || value.any { it.isISOControl() }) return "Некорректная ссылка."
         val uri = try { URI(value) } catch (_: Exception) { return "Некорректная ссылка." }
         if (uri.scheme != "https" || uri.rawUserInfo != null) return "URL должен начинаться с https://"
-        if (uri.host !in listOf("disk.yandex.ru", "disk.yandex.com") || uri.port !in listOf(-1, 443))
-            return "Используйте HTTPS-ссылку disk.yandex.ru или disk.yandex.com."
+        if (uri.host !in listOf("disk.yandex.ru", "disk.yandex.com", "cloud.mail.ru", "doc.mail.ru") || uri.port !in listOf(-1, 443))
+            return "Используйте HTTPS-ссылку disk.yandex.ru, cloud.mail.ru или doc.mail.ru."
         return null
     }
 
@@ -20,11 +20,11 @@ object LauncherRules {
     fun safeEvent(line: String, verbose: Boolean): String? = when {
         line == "FLUS_LISTENING" -> "SOCKS5 слушает 127.0.0.1:1080"
         line.contains("address already in use", true) -> "Порт 1080 уже занят. Остановите другое приложение."
-        line.contains("websocket", true) && (line.contains("error", true) || line.contains("failed", true) || line.contains("close", true)) -> "Ошибка Yandex WebSocket. Проверьте ссылку, сеть и exit-node."
+        line.contains("websocket", true) && (line.contains("error", true) || line.contains("failed", true) || line.contains("close", true)) -> "Ошибка WebSocket. Проверьте ссылку, сеть и exit-node."
         line.contains("fetchDocInfo failed") -> "Не удалось открыть документ. Проверьте edit-ссылку и права доступа."
         line.contains("panic:") -> "Внутренняя ошибка OpenFlux."
         line.contains("Failed to start transport") -> "Не удалось запустить транспорт."
-        verbose && line.contains("connectToDoc attempt") -> "Попытка подключения к Yandex Docs"
+        verbose && line.contains("connectToDoc attempt") -> "Попытка подключения к документу"
         verbose && line.contains("Keep-alive failed") -> "Соединение с транспортом потеряно"
         else -> null
     }

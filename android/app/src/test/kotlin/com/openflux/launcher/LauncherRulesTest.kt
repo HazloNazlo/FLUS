@@ -12,6 +12,8 @@ class LauncherRulesTest {
         assertNotNull(LauncherRules.validate("https://disk.yandex.ru:8080/edit/d/test"))
         assertNull(LauncherRules.validate("https://disk.yandex.ru/edit/d/test"))
         assertNull(LauncherRules.validate("https://disk.yandex.com/i/test"))
+        assertNull(LauncherRules.validate("https://cloud.mail.ru/public/wQjd/w5uUGfuZf"))
+        assertNull(LauncherRules.validate("https://doc.mail.ru/r-seven/edit/home/Doc.docx"))
     }
     @Test fun logsNeverExposeUpstreamSecrets() {
         val privateValue = "synthetic-test-secret"
