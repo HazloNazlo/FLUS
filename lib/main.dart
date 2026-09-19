@@ -135,7 +135,9 @@ class _LauncherPageState extends State<LauncherPage>
       return;
     }
     final uri = Uri.parse(url.text.trim());
-    if (!((uri.path.startsWith('/edit/d/') && uri.path.length > 8) || (uri.host == 'cloud.mail.ru' && uri.path.contains('/edit/')))) {
+    final isYandexEdit = uri.host.contains('yandex') && ((uri.path.startsWith('/edit/d/') && uri.path.length > 8) || (uri.path.startsWith('/i/') && uri.path.length > 3));
+    final isMailRu = uri.host == 'cloud.mail.ru' || uri.host == 'doc.mail.ru';
+    if (!isYandexEdit && !isMailRu) {
       final confirmed = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
