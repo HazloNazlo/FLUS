@@ -45,7 +45,7 @@ jobs:
           ANDROID_NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/27.0.12077973
         run: |
           export ANDROID_NDK_HOME="$ANDROID_HOME/ndk/27.0.12077973"
-          test -d "$ANDROID_NDK_HOME" || { echo 'Required preinstalled NDK 27.0.12077973 is missing'; exit 1; }
+          test -d "$ANDROID_NDK_HOME" || { echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "ndk;27.0.12077973"; }
           (cd vendor && go test ./socks5)
           bash scripts/build-core.sh
       - name: Debug APK on every push
