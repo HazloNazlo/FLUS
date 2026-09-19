@@ -31,7 +31,7 @@ void main() {
       await tester.ensureVisible(find.text('Start'));
       await tester.tap(find.text('Start'));
       await tester.pumpAndSettle();
-      expect(find.text('Вставьте ссылку Cloud (Mail.ru/Yandex)'), findsOneWidget);
+      expect(find.text('Вставьте Yandex / Mail.ru URL.'), findsOneWidget);
       expect(tester.takeException(), isNull);
     },
     variant: TargetPlatformVariant.only(TargetPlatform.linux),
