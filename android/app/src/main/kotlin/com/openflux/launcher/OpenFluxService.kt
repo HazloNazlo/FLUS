@@ -88,7 +88,8 @@ class OpenFluxService : Service() {
             val binary = File(applicationInfo.nativeLibraryDir, "libopenflux.so")
             if (!binary.isFile) throw LauncherFailure("Встроенный OpenFlux не найден. Установите arm64 APK из Releases.")
             if (!binary.canExecute()) throw LauncherFailure("Не удалось запустить OpenFlux: проверьте упаковку APK.")
-            val process = ProcessBuilder(binary.absolutePath, "--client", "--transport", "yandex", "--url-stdin", "--socks5", "127.0.0.1:1080", "--debug")
+            val transport = if (url.contains("mail.ru") || url.contains("mail.ru/public")) "mailru" else "yandex"
+            val process = ProcessBuilder(binary.absolutePath, "--client", "--transport", transport, "--url-stdin", "--socks5", "127.0.0.1:1080", "--debug")
                 .directory(noBackupFilesDir).redirectErrorStream(true).start()
             child = process
             if (stopping.get()) { process.destroy(); return }

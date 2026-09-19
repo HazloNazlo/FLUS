@@ -6,13 +6,13 @@ import 'package:flutter/services.dart';
 void main() => runApp(const FlusApp());
 
 String? validateUrl(String value) {
-  if (value.trim().isEmpty) return 'Вставьте Yandex Docs URL.';
+  if (value.trim().isEmpty) return 'Вставьте Yandex / Mail.ru URL.';
   final uri = Uri.tryParse(value.trim());
   if (uri == null || uri.scheme != 'https' || uri.userInfo.isNotEmpty) {
     return 'Нужна корректная ссылка, начинающаяся с https://';
   }
-  if (!['disk.yandex.ru', 'disk.yandex.com'].contains(uri.host)) {
-    return 'Используйте ссылку disk.yandex.ru или disk.yandex.com.';
+  if (!['disk.yandex.ru', 'disk.yandex.com', 'cloud.mail.ru'].contains(uri.host)) {
+    return 'Используйте ссылку disk.yandex.ru или cloud.mail.ru.';
   }
   return null;
 }
@@ -135,13 +135,13 @@ class _LauncherPageState extends State<LauncherPage>
       return;
     }
     final uri = Uri.parse(url.text.trim());
-    if (!uri.path.startsWith('/edit/d/') || uri.path.length <= 8) {
+    if (!((uri.path.startsWith('/edit/d/') && uri.path.length > 8) || (uri.host == 'cloud.mail.ru' && uri.path.contains('/edit/')))) {
       final confirmed = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Это не edit-ссылка'),
           content: const Text(
-            'Похоже, это публичная Disk-ссылка или другой формат. OpenFlux может не подключиться. Лучше использовать Yandex Docs /edit/d/…',
+            'Похоже, это публичная ссылка для просмотра или другой формат. OpenFlux может не подключиться. Убедитесь, что ссылка позволяет редактирование.',
           ),
           actions: [
             TextButton(
@@ -339,7 +339,7 @@ class _LauncherPageState extends State<LauncherPage>
                 ),
                 const SizedBox(height: 26),
                 const Text(
-                  'Yandex Docs URL',
+                  'Yandex Docs / Mail.ru URL',
                   style: TextStyle(fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 10),
@@ -355,7 +355,7 @@ class _LauncherPageState extends State<LauncherPage>
                     autofillHints: const [],
                     validator: (value) => validateUrl(value ?? ''),
                     decoration: InputDecoration(
-                      hintText: 'https://disk.yandex.ru/edit/d/…',
+                      hintText: 'https://...',
                       suffixIcon: IconButton(
                         tooltip: hidden ? 'Показать URL' : 'Скрыть URL',
                         onPressed: () => setState(() => hidden = !hidden),
