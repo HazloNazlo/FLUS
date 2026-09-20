@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
 	"log"
@@ -105,6 +106,7 @@ func main() {
 	benchCompressible := flag.Bool("bench-compressible", false, "Benchmark: use compressible payload instead of random")
 
 	debug := flag.Bool("debug", false, "Enable verbose debug logging")
+	urlStdin := flag.Bool("url-stdin", false, "Read the document URL from stdin (first line) instead of --url")
 
 	// Deprecated aliases, kept for one release to ease migration.
 	depClient := flag.Bool("client", false, "DEPRECATED: use --role=client")
@@ -266,6 +268,15 @@ DEPRECATED (removed in v2)
 
 	if *debug {
 		utils.EnableDebug()
+	}
+
+	if *urlStdin {
+		scanner := bufio.NewScanner(os.Stdin)
+		if scanner.Scan() {
+			globalDocUrl = strings.TrimSpace(scanner.Text())
+		} else {
+			log.Fatalf("--url-stdin: failed to read URL from stdin")
+		}
 	}
 
 	log.Printf("=== Universal Bypass Tool ===")
