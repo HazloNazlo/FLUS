@@ -14,6 +14,7 @@ import (
 	"math/rand"
 	"net"
 	"net/http"
+	"net/url"
 	"regexp"
 	"strings"
 	"sync"
@@ -80,6 +81,12 @@ func NewMailruDocsTransport(weblink string, config transport.TransportConfig) *M
 
 func normalizeWeblink(weblink string) string {
 	weblink = strings.TrimSpace(weblink)
+
+	// If it's a URL with a weblink query parameter (like doc.mail.ru links)
+	if u, err := url.Parse(weblink); err == nil && u.Query().Has("weblink") {
+		return strings.Trim(u.Query().Get("weblink"), "/")
+	}
+
 	for _, prefix := range []string{
 		"https://cloud.mail.ru/public/",
 		"http://cloud.mail.ru/public/",
