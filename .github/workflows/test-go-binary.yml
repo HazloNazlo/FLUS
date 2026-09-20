@@ -12,6 +12,7 @@ jobs:
       - name: Build and run Go binary
         run: |
           cd vendor
+          go mod tidy
           go build -o openflux .
           echo 'https://cloud.mail.ru/public/wQjd/w5uUGfuZf' | ./openflux --client --transport mailru --url-stdin --socks5 127.0.0.1:1080 --debug &
           PID=$!
