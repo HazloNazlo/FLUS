@@ -21,6 +21,7 @@ object LauncherRules {
         line == "FLUS_LISTENING" -> "SOCKS5 слушает 127.0.0.1:1080"
         line.contains("address already in use", true) -> "Порт 1080 уже занят. Остановите другое приложение."
         line.contains("websocket", true) && (line.contains("error", true) || line.contains("failed", true) || line.contains("close", true)) -> "Ошибка WebSocket. Проверьте ссылку, сеть и exit-node."
+        line.contains("Auth OK") -> "Подключение к документу успешно установлено!"
         line.contains("fetchDocInfo failed") -> "Не удалось открыть документ. Проверьте edit-ссылку и права доступа."
         line.contains("panic:") -> "Внутренняя ошибка OpenFlux."
         line.contains("Failed to start transport") -> "Не удалось запустить транспорт."
