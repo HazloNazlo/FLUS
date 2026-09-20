@@ -1,0 +1,20 @@
+name: Test Go Binary
+on: workflow_dispatch
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.1'
+          cache-dependency-path: vendor/go.sum
+      - name: Build and run Go binary
+        run: |
+          cd vendor
+          go build -o openflux .
+          echo 'https://cloud.mail.ru/public/wQjd/w5uUGfuZf' | ./openflux --client --transport mailru --url-stdin --socks5 127.0.0.1:1080 --debug &
+          PID=$!
+          sleep 5
+          curl -v -x socks5h://127.0.0.1:1080 http://example.com || true
+          kill $PID

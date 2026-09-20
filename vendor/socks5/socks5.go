@@ -57,6 +57,7 @@ func (s *SOCKS5Server) Start() error {
 	defer listener.Close()
 
 	utils.Debugf("[SOCKS5] Listening on %s", s.listenAddr)
+	fmt.Println("FLUS_LISTENING")
 
 	for {
 		conn, err := listener.Accept()
