@@ -1,7 +1,7 @@
-name: Test Go Binary
+name: Build Windows Binary
 on: workflow_dispatch
 jobs:
-  test:
+  build-windows:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
@@ -9,13 +9,13 @@ jobs:
         with:
           go-version: '1.27.1'
           cache-dependency-path: vendor/go.sum
-      - name: Build and run Go binary
+      - name: Build Windows binary
         run: |
           cd vendor
           go mod tidy
-          go build -o openflux .
-          echo 'https://cloud.mail.ru/public/wQjd/w5uUGfuZf' | ./openflux --client --transport mailru --url-stdin --socks5 127.0.0.1:1080 --debug &
-          PID=$!
-          sleep 5
-          curl -v -x socks5h://127.0.0.1:1080 http://example.com || true
-          kill $PID
+          GOOS=windows GOARCH=amd64 go build -o openflux.exe .
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: openflux-windows-amd64
+          path: vendor/openflux.exe
